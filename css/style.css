@@ -1,29 +1,32 @@
-body, html {
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 100%;
     margin: 0;
     color: white;
     background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 48px;
     font-family: Arial, sans-serif;
 }
 
-#speed-display {
-    font-size: 5em;
+#speed-display, #speed-limit {
+    font-size: 5em; /* Juster efter behov */
+    margin: 10px;
 }
 
-/* Mindre skærme i portrættilstand */
-@media screen and (max-width: 600px) {
-    #speed-display {
-        font-size: 3em; /* Mindre tekststørrelse */
-    }
+#speed-limit {
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 100px; /* Juster efter behov */
+    height: 100px; /* Juster efter behov */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Større skærme i portrættilstand */
-@media screen and (min-width: 601px) {
-    #speed-display {
-        font-size: 6em; /* Større tekststørrelse */
+@media screen and (orientation: landscape) {
+    body {
+        flex-direction: row;
     }
 }
