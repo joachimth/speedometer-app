@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
 function getSpeedLimit(lat, lng) {
-    const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
+    const apiKey = 'AIzaSyBiNnRq_bOUJ2i1gvmPz1Rzmp42eYd3-lg';
     const url = `https://roads.googleapis.com/v1/speedLimits?path=${lat},${lng}&key=${apiKey}`;
 
     axios.get(url)
