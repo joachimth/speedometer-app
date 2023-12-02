@@ -18,6 +18,20 @@ document.addEventListener("DOMContentLoaded", function() {
     } else {
         alert("Geolocation is not supported by this browser.");
     }
+    
+function getSpeedLimit(lat, lng) {
+    const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY';
+    const url = `https://roads.googleapis.com/v1/speedLimits?path=${lat},${lng}&key=${apiKey}`;
+
+    axios.get(url)
+        .then(response => {
+            const speedLimit = response.data.speedLimits[0].speedLimit;
+            // Opdater din UI med hastighedsgrænsen
+        })
+        .catch(error => {
+            console.error("Error fetching speed limit:", error);
+        });
+}
 
     // Keep the screen awake
     // Note: This functionality might need additional implementation based on the browser.
