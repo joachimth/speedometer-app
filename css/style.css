@@ -18,11 +18,15 @@ body {
 #speed-limit {
     border: 2px solid white;
     border-radius: 50%;
+    background-color: black;
+    color: black;
     width: 100px; /* Juster efter behov */
     height: 100px; /* Juster efter behov */
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    font-size: 2.5em; /* Juster efter behov */
 }
 
 @media screen and (orientation: landscape) {
