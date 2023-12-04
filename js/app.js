@@ -1,12 +1,24 @@
-
-
 document.addEventListener("DOMContentLoaded", function() {
     const speedDisplay = document.getElementById('speed-display');
+    let collectedCoordinates = [];
 
     function updateSpeed(position) {
         const speedInKmh = Math.round(position.coords.speed * 3.6);
         document.getElementById('speed-display').textContent = speedInKmh;
-        getSpeedLimit(position.coords.latitude, position.coords.longitude);
+
+        // Collect coordinates
+        collectedCoordinates.push({ lat: position.coords.latitude, lng: position.coords.longitude });
+
+        // Call Snap to Roads when threshold is reached
+        if (collectedCoordinates.length >= SOME_THRESHOLD) {
+            snapToRoads(collectedCoordinates).then(snappedPoints => {
+                // Use snapped points to get speed limits
+                // Update UI with new speed limits
+            });
+
+            // Reset collected coordinates
+            collectedCoordinates = [];
+        }
     }
 
     function updateSpeedLimit(speedLimit) {
@@ -26,25 +38,16 @@ document.addEventListener("DOMContentLoaded", function() {
         alert("Geolocation is not supported by this browser.");
     }
 
-    function getSpeedLimit(lat, lng) {
-        const apiKey = 'AIzaSyBiNnRq_bOUJ2i1gvmPz1Rzmp42eYd3-lg';
-        const url = `https://roads.googleapis.com/v1/speedLimits?path=${lat},${lng}&key=${apiKey}`;
+    function snapToRoads(coordinates) {
+        const path = coordinates.map(coord => `${coord.lat},${coord.lng}`).join('|');
+        const url = `https://roads.googleapis.com/v1/snapToRoads?path=${path}&key=YOUR_API_KEY`;
 
-        axios.get(url)
-            .then(response => {
-                if (response.data.speedLimits && response.data.speedLimits.length > 0) {
-                    const speedLimit = response.data.speedLimits[0].speedLimit;
-                    updateSpeedLimit(speedLimit);
-                } else {
-                    console.log("No speed limit data available");
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching speed limit:", error);
-            });
+        return axios.get(url)
+            .then(response => response.data.snappedPoints)
+            .catch(error => console.error("Error in snapToRoads:", error));
     }
 
-    // Keep the screen awake
-    // Note: This functionality might need additional implementation based on the browser.
-    // No standard method exists as of my last update in January 2022.
+    // Define the threshold for Snap to Roads API calls
+    const SOME_THRESHOLD = 12; // Adjust based on your specific requirements
+    const YOUR_API_KEY = "AIzaSyBiNnRq_bOUJ2i1gvmPz1Rzmp42eYd3-lg";
 });
