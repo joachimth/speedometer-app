@@ -43,25 +43,29 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function snapToRoads(coordinates) {
-        const coordinatesString = coordinates.map(coord => `${coord.lat},${coord.lng}`).join(';');
-        const query = `
-            [out:json];
-            (
-                way(around:30, ${coordinatesString})["highway"];
-            );
-            out body;
-        `;
-        const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+    // Konverter koordinater til en streng, der kan bruges i Overpass API-forespørgslen
+    // Brug et semikolon til at adskille koordinaterne
+    const coordinatesString = coordinates.map(coord => `${coord.lat},${coord.lng}`).join(';');
 
-        return axios.get(overpassUrl)
-            .then(response => {
-                return response.data.elements;
-            })
-            .catch(error => {
-                console.error("Error in snapToRoads:", error);
-                return [];
-            });
-    }
+    // Overpass API-forespørgsel for at finde veje tæt på de givne koordinater
+    const query = `
+        [out:json];
+        (
+            way(around:30, ${coordinatesString})["highway"];
+        );
+        out body;
+    `;
+    const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+
+    return axios.get(overpassUrl)
+        .then(response => {
+            return response.data.elements;
+        })
+        .catch(error => {
+            console.error("Error in snapToRoads:", error);
+            return [];
+        });
+}
 
         function getSpeedLimit(lat, lng) {
         const query = `
