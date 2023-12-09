@@ -13,7 +13,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (collectedCoordinates.length >= SOME_THRESHOLD) {
             snapToRoads(collectedCoordinates).then(snappedPoints => {
                 // Use snapped points to get speed limits
-                // Update UI with new speed limits
+                // Assuming the first snapped point is where we want to check the speed limit
+                if (snappedPoints.length > 0) {
+                    const { lat, lon } = snappedPoints[0].location;
+                    getSpeedLimit(lat, lon);
+                }
             });
 
             // Reset collected coordinates
@@ -39,15 +43,59 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function snapToRoads(coordinates) {
-        const path = coordinates.map(coord => `${coord.lat},${coord.lng}`).join('|');
-        const url = `https://roads.googleapis.com/v1/snapToRoads?path=${path}&key=YOUR_API_KEY`;
+        const coordinatesString = coordinates.map(coord => `${coord.lat},${coord.lng}`).join('|');
+        const query = `
+            [out:json];
+            (
+                way(around:30, ${coordinatesString})["highway"];
+            );
+            out body;
+        `;
+        const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
 
-        return axios.get(url)
-            .then(response => response.data.snappedPoints)
-            .catch(error => console.error("Error in snapToRoads:", error));
+        return axios.get(overpassUrl)
+            .then(response => {
+                return response.data.elements;
+            })
+            .catch(error => {
+                console.error("Error in snapToRoads:", error);
+                return [];
+            });
     }
 
-    // Define the threshold for Snap to Roads API calls
-    const SOME_THRESHOLD = 1; // Adjust based on your specific requirements
-    const YOUR_API_KEY = "AIzaSyAuLR18l6VFu-4CZQJBsXSlfAm1Z3evJWs";
+        function getSpeedLimit(lat, lng) {
+        const query = `
+            [out:json];
+            way
+              (around:30,${lat},${lng})
+              ["highway"];
+            out body;
+        `;
+        const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+
+        axios.get(overpassUrl)
+            .then(response => {
+                const roads = response.data.elements;
+                if (roads.length > 0) {
+                    const nearestRoad = roads[0];
+                    const speedLimit = extractSpeedLimit(nearestRoad);
+                    updateSpeedLimit(speedLimit);
+                } else {
+                    console.log("Ingen veje fundet i nærheden");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching road data from OSM:", error);
+            });
+    }
+
+    function extractSpeedLimit(road) {
+        if (road.tags && road.tags.maxspeed) {
+            return road.tags.maxspeed;
+        } else {
+            return "Ukendt";
+        }
+    }
+
+    const SOME_THRESHOLD = 12; // Adjust based on your specific requirements
 });
