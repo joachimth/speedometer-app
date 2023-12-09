@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function snapToRoads(coordinates) {
-        const coordinatesString = coordinates.map(coord => `${coord.lat},${coord.lng}`).join('|');
+        const coordinatesString = coordinates.map(coord => `${coord.lat},${coord.lng}`).join(';');
         const query = `
             [out:json];
             (
