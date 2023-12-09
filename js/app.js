@@ -48,6 +48,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Define the threshold for Snap to Roads API calls
-    const SOME_THRESHOLD = 12; // Adjust based on your specific requirements
-    const YOUR_API_KEY = "AIzaSyBiNnRq_bOUJ2i1gvmPz1Rzmp42eYd3-lg";
+    const SOME_THRESHOLD = 1; // Adjust based on your specific requirements
+    const YOUR_API_KEY = "AIzaSyAuLR18l6VFu-4CZQJBsXSlfAm1Z3evJWs";
 });
