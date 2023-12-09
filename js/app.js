@@ -43,15 +43,15 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function snapToRoads(coordinates) {
-    // Konverter koordinater til en streng, der kan bruges i Overpass API-forespørgslen
-    // Brug et semikolon til at adskille koordinaterne
-    const coordinatesString = coordinates.map(coord => `${coord.lat},${coord.lng}`).join(';');
+    // Opret en separat Overpass API-forespørgsel for hver koordinat
+    const queries = coordinates.map(coord => 
+        `way(around:30,${coord.lat},${coord.lng})["highway"];`
+    ).join('');
 
-    // Overpass API-forespørgsel for at finde veje tæt på de givne koordinater
     const query = `
         [out:json];
         (
-            way(around:30, ${coordinatesString})["highway"];
+            ${queries}
         );
         out body;
     `;
