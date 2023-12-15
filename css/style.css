@@ -7,7 +7,7 @@ body {
     margin: 0;
     color: white;
     background-color: black;
-    font-family: Arial, sans-serif;
+    font-family: "Lucida Console", "Courier New", monospace;
 }
 
 #speed-display, #speed-limit {
