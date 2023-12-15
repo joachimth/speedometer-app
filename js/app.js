@@ -83,6 +83,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (roads.length > 0) {
                     const nearestRoad = roads[0];
                     const speedLimit = extractSpeedLimit(nearestRoad);
+                    console.log("Nearest Road: ", nearestRoad);
+                    console.log("Speedlimit: ", speedLimit);
+                    console.log("Highway: ", extracthighway(road));
                     updateSpeedLimit(speedLimit);
                 } else {
                     console.log("Ingen veje fundet i nærheden");
@@ -96,6 +99,14 @@ document.addEventListener("DOMContentLoaded", function() {
     function extractSpeedLimit(road) {
         if (road.tags && road.tags.maxspeed) {
             return road.tags.maxspeed;
+        } else {
+            return "Ukendt";
+        }
+    }
+
+function extracthighway(road) {
+        if (road.tags && road.tags.highway) {
+            return road.tags.highway;
         } else {
             return "Ukendt";
         }
