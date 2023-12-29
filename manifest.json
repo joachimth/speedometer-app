@@ -13,7 +13,7 @@
       "type": "image/svg+xml"
     }
   ],
-  "start_url": "/",
+  "start_url": "/speedometer-app/",
   "display": "standalone",
   "orientation": "portrait"
 }
