@@ -1,6 +1,8 @@
 {
   "short_name": "Speedometer",
   "name": "Speedometer App",
+  "version": "1.0.0",
+  "homepage": "https://joachimth.github.io/speedometer-app",
   "icons": [
     {
       "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+DQogICAgPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiPjwvY2lyY2xlPg0KICAgIDxsaW5lIHgxPSIxMiIgeTE9IjEyIiB4Mj0iMTYiIHkyPSIxMiI+PC9saW5lPg0KICAgIDxwYXRoIGQ9Ik0xMiAydjIiPjwvcGF0aD4NCiAgICA8cGF0aCBkPSJNMTIgMjB2MiI+PC9wYXRoPg0KICAgIDxwYXRoIGQ9Ik00LjIyIDQuMjJsMS40MiAxLjQyIj48L3BhdGg+DQogICAgPHBhdGggZD0iTTE4LjM2IDE4LjM2bDEuNDIgMS40MiI+PC9wYXRoPg0KICAgIDxwYXRoIGQ9Ik0yIDEyaDIiPjwvcGF0aD4NCiAgICA8cGF0aCBkPSJNMjAgMTJoMiI+PC9wYXRoPg0KICAgIDxwYXRoIGQ9Ik00LjIyIDE5Ljc4bDEuNDItMS40MiI+PC9wYXRoPg0KICAgIDxwYXRoIGQ9Ik0xOC4zNiA1LjY0bDEuNDItMS40MiI+PC9wYXRoPg0KPC9zdmc+DQo=",
