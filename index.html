@@ -18,8 +18,21 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="speed-display">00</div>
-    <div id="speed-limit">--</div>
+    <div class="flex-center">
+    <div id="speed">-</div>
+</div>
+
+<div class="flex-right">
+    <div id="speedlimit">-</div>
+</div>
+
+<div class="container">
+    <div id="roadinfo" class="mediumtext" style="margin-bottom: 18%">Vej: ?</div>
+    <button id="clickme" class="start" aria-label="Start">
+        <!-- SVG-icons her -->
+    </button>
+</div>
+
     <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
     <script src="js/app.js"></script>
 </body>
