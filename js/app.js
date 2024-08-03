@@ -62,6 +62,13 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    function showLimit(position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        getSpeedLimit(lat, lon);
+    }
+
     function snapToRoads(coordinates) {
         const query = coordinates.map(coord => `way(around:30,${coord.lat},${coord.lng})["highway"];`).join('');
         const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(${query});out body;`;
