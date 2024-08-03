@@ -11,10 +11,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let collectedCoordinates = [];
     const SOME_THRESHOLD = 12;
+    let $watchHandler_showPosition = null;
+    let $watchHandler_showLimit = null;
 
     button.addEventListener("click", manualStart);
 
-    function updateSpeed(position) {
+    function manualStart() {
+        if ($watchHandler_showPosition === null) {
+            tryGetLocation();
+            document.getElementById("icon-start").style.display = "none";
+            document.getElementById("icon-ok").style.display = "inline-block";
+        }
+    }
+
+    function tryGetLocation($maxage = 0) {
+        const options = {
+            enableHighAccuracy: true,
+            timeout: Infinity,
+            maximumAge: $maxage
+        };
+
+        if (navigator.geolocation) {
+            $watchHandler_showPosition = navigator.geolocation.watchPosition(showPosition, errorCallback, options);
+            $watchHandler_showLimit = navigator.geolocation.watchPosition(showLimit, errorCallback, options);
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function errorCallback(error) {
+        navigator.geolocation.clearWatch($watchHandler_showPosition);
+        tryGetLocation();
+    }
+
+    function showPosition(position) {
         const speedInKmh = Math.round(position.coords.speed * 3.6);
         speedDisplay.textContent = speedInKmh;
 
@@ -32,27 +62,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    function updateSpeedLimit(speedLimit) {
-        speedLimitDisplay.textContent = speedLimit;
-    }
-
-    function handleError(error) {
-        console.warn('ERROR(' + error.code + '): ' + error.message);
-    }
-
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(updateSpeed, handleError, {
-            enableHighAccuracy: true,
-            maximumAge: 0
-        });
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
-
     function snapToRoads(coordinates) {
-        const coordinatesString = coordinates.map(coord => `${coord.lat},${coord.lng}`).join(';');
-        const query = `[out:json];(way(around:30,${coordinatesString})["highway"];);out body;`;
-        const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+        const query = coordinates.map(coord => `way(around:30,${coord.lat},${coord.lng})["highway"];`).join('');
+        const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(${query});out body;`;
 
         return axios.get(overpassUrl)
             .then(response => response.data.elements)
@@ -122,104 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function showTrafficAlert(alert) {
-        const trafficAlertDiv = document.getElementById('roadinfo');
-        trafficAlertDiv.style.display = 'block';
-        trafficAlertDiv.textContent = `Advarsel: Fare nær! (${alert.address})`;
+        roadInfoDisplay.style.display = 'block';
+        roadInfoDisplay.textContent = `Advarsel: Fare nær! (${alert.address})`;
     }
-
-    const tryGetSpeedLimit = async ($lat, $lon) => {
-        let $eofstr = `[out:json];(way(around:10,${$lat},${$lon})[highway][maxspeed];);out tags;`;
-        try {
-            const response = await fetch($prodapi, {
-                method: "POST",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "text/plain;charset=UTF-8"
-                },
-                body: $eofstr
-            });
-            let $respjson = await response.json();
-            $roadname = $respjson?.["elements"]?.[0]?.["tags"]?.["name"] ?? "N/A";
-            $roadlimit = $respjson?.["elements"]?.[0]?.["tags"]?.["maxspeed"] ?? "N/A";
-            return $respjson;
-        } catch ($error) {
-            return null;
-        }
-    };
-
-    const showLimit = async ($position) => {
-        const $respjson = await tryGetSpeedLimit($position.coords.latitude, $position.coords.longitude);
-        $lastdata.push($respjson?.["elements"]?.[0]?.["tags"]?.["name"]);
-        $roadname = $respjson?.["elements"]?.[0]?.["tags"]?.["name"] ?? "N/A";
-        $roadlimit = $respjson?.["elements"]?.[0]?.["tags"]?.["maxspeed"] ?? "N/A";
-
-        if ($lastdata.length >= 3) {
-            for await (let $entry_roadname of $lastdata) {
-                if ($i >= 2) { $i = -1; }
-                if (!($entry_roadname == null || $entry_roadname == undefined)) {
-                    $i++;
-                    $roadnames[$i] = $entry_roadname ?? null;
-                }
-                break;
-            }
-
-            const $bool_allthree = $roadnames.every(function ($ename) {
-                return $ename === $roadname;
-            });
-
-            if ($bool_allthree) {
-                roadInfoDisplay.innerHTML = "Vej: " + $roadname;
-                speedLimitDisplay.innerHTML = $roadlimit;
-            }
-
-            $lastdata = [];
-        }
-    };
-
-    function manualStart() {
-        if ($watchHandler_showPosition == null) {
-            tryGetLocation();
-            document.getElementById("icon-start").style.display = "none";
-            document.getElementById("icon-ok").style.display = "inline-block";
-        }
-    }
-
-    function tryGetLocation($maxage = 0) {
-        const options = {
-            enableHighAccuracy: true,
-            timeout: Infinity,
-            maximumAge: $maxage
-        };
-
-        if (navigator.geolocation) {
-            $watchHandler_showPosition = navigator.geolocation.watchPosition(showPosition, errorCallback, options);
-            $watchHandler_showLimit = navigator.geolocation.watchPosition(showLimit, errorCallback, options);
-        } else {
-            $info.innerHTML = "Geolocation is not supported by this browser.";
-        }
-    }
-
-    function errorCallback($err) {
-        navigator.geolocation.clearWatch($watchHandler_showPosition);
-        tryGetLocation($maxage);
-    }
-
-    const showPosition = async ($position) => {
-        let $speed = $position.coords.speed;
-        let $accu = $position.coords.accuracy;
-        let $ts = $position.timestamp;
-        let $dpspeed = Math.round($speed * 3.6);
-        speedDisplay.innerHTML = $dpspeed;
-
-        let $dt = new Date($ts);
-        $info.innerHTML = `Tid: ${$dt.toLocaleTimeString("da-DK")} <br>Nøjagtighed: ${Math.round($accu)} m`;
-    };
-
-    const $button = document.getElementById("clickme");
-    $button.addEventListener("click", manualStart);
-    document.addEventListener('readystatechange', event => {
-        if (event.target.readyState === "complete") {
-            manualStart();
-        }
-    });
 });
