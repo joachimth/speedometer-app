@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (snappedPoints.length > 0) {
                     const { lat, lon } = snappedPoints[0];
                     getSpeedLimit(lat, lon);
-                    getTrafficAlerts(lat, lon);
+                    // getTrafficAlerts(lat, lon); Disabled since no API key.
                 }
             });
             collectedCoordinates = [];
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     const roadName = nearestRoad.tags.name || nearestRoad.tags.ref || "Ukendt";
 
                     updateSpeedLimit(speedLimit);
-                    roadInfoDisplay.textContent = `Vej: ${roadName}`;
+                    roadInfoDisplay.textContent = `${roadName} `;
                 } else {
                     console.log("Ingen veje fundet i nærheden");
                 }
