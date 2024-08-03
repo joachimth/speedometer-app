@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function showPosition(position) {
         const speedInKmh = Math.round(position.coords.speed * 3.6);
-        speedDisplay.textContent = speedInKmh;
+        speedDisplay.textContent = speedInKmh !== NaN ? speedInKmh : '-';
 
         collectedCoordinates.push({ lat: position.coords.latitude, lng: position.coords.longitude });
 
@@ -91,7 +91,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (roads.length > 0) {
                     const nearestRoad = roads[0];
                     const speedLimit = nearestRoad.tags && nearestRoad.tags.maxspeed ? nearestRoad.tags.maxspeed : "Ukendt";
+                    const roadName = nearestRoad.tags && nearestRoad.tags.name ? nearestRoad.tags.name : "Ukendt";
+
                     updateSpeedLimit(speedLimit);
+                    roadInfoDisplay.textContent = "Vej: " + roadName;
                 } else {
                     console.log("Ingen veje fundet i nærheden");
                 }
