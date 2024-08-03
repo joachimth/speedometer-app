@@ -40,13 +40,14 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function errorCallback(error) {
+        console.error("Geolocation error:", error);
         navigator.geolocation.clearWatch($watchHandler_showPosition);
         tryGetLocation();
     }
 
     function showPosition(position) {
         const speedInKmh = Math.round(position.coords.speed * 3.6);
-        speedDisplay.textContent = speedInKmh !== NaN ? speedInKmh : '-';
+        speedDisplay.textContent = isNaN(speedInKmh) ? '-' : speedInKmh;
 
         collectedCoordinates.push({ lat: position.coords.latitude, lng: position.coords.longitude });
 
@@ -74,7 +75,12 @@ document.addEventListener("DOMContentLoaded", function() {
         const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(${query});out body;`;
 
         return axios.get(overpassUrl)
-            .then(response => response.data.elements)
+            .then(response => {
+                if (response.data && response.data.elements) {
+                    return response.data.elements;
+                }
+                throw new Error("No elements found");
+            })
             .catch(error => {
                 console.error("Error in snapToRoads:", error);
                 return [];
@@ -89,12 +95,13 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => {
                 const roads = response.data.elements;
                 if (roads.length > 0) {
+                    // Extract maxspeed and name or ref
                     const nearestRoad = roads[0];
-                    const speedLimit = nearestRoad.tags && nearestRoad.tags.maxspeed ? nearestRoad.tags.maxspeed : "Ukendt";
-                    const roadName = nearestRoad.tags && nearestRoad.tags.name ? nearestRoad.tags.name : "Ukendt";
+                    const speedLimit = nearestRoad.tags.maxspeed || "Ukendt";
+                    const roadName = nearestRoad.tags.name || nearestRoad.tags.ref || "Ukendt";
 
                     updateSpeedLimit(speedLimit);
-                    roadInfoDisplay.textContent = "Vej: " + roadName;
+                    roadInfoDisplay.textContent = `Vej: ${roadName}`;
                 } else {
                     console.log("Ingen veje fundet i nærheden");
                 }
@@ -102,6 +109,10 @@ document.addEventListener("DOMContentLoaded", function() {
             .catch(error => {
                 console.error("Error fetching road data from OSM:", error);
             });
+    }
+
+    function updateSpeedLimit(speedLimit) {
+        speedLimitDisplay.textContent = speedLimit;
     }
 
     function getTrafficAlerts(lat, lng) {
@@ -131,16 +142,18 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-        const R = 6371;
+        const R = 6371; // Radius of the earth in km
         const dLat = deg2rad(lat2 - lat1);
         const dLon = deg2rad(lon2 - lon1);
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
     }
 
     function deg2rad(deg) {
-        return deg * (Math.PI/180);
+        return deg * (Math.PI / 180);
     }
 
     function showTrafficAlert(alert) {
