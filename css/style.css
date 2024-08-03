@@ -10,22 +10,33 @@ body {
     font-family: "Lucida Console", "Courier New", monospace;
 }
 
-#speed, #speedlimit, #roadinfo, #clickme {
+#speed {
     font-size: 10em; /* Juster efter behov */
     margin: 10px;
 }
 
+#roadinfo {
+    font-size: 5em; /* Juster efter behov */
+    margin: 5px;
+}
+
+#clickme {
+    font-size: 5em; /* Juster efter behov */
+    margin: 5px;
+}
+
 #speedlimit {
-    border: 2px solid white;
+    border: 2px solid red;
     border-radius: 50%;
-    background-color: black;
-    color: white;
+    background-color: white;
+    color: black;
     width: 200px; /* Juster efter behov */
     height: 200px; /* Juster efter behov */
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    margin: 10px;
     font-size: 5em; /* Juster efter behov */
 }
 
