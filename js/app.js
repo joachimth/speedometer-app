@@ -2,8 +2,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const speedDisplay = document.getElementById('speed');
     const speedLimitDisplay = document.getElementById('speedlimit');
     const roadInfoDisplay = document.getElementById('roadinfo');
+    const button = document.getElementById('clickme');
+
+    if (!speedDisplay || !speedLimitDisplay || !roadInfoDisplay || !button) {
+        console.error("Nødvendige DOM-elementer blev ikke fundet.");
+        return;
+    }
+
     let collectedCoordinates = [];
     const SOME_THRESHOLD = 12;
+
+    button.addEventListener("click", manualStart);
 
     function updateSpeed(position) {
         const speedInKmh = Math.round(position.coords.speed * 3.6);
