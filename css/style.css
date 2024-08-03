@@ -10,12 +10,12 @@ body {
     font-family: "Lucida Console", "Courier New", monospace;
 }
 
-#speed-display, #speed-limit {
+#speed, #speedlimit, #roadinfo, #clickme {
     font-size: 10em; /* Juster efter behov */
     margin: 10px;
 }
 
-#speed-limit {
+#speedlimit {
     border: 2px solid white;
     border-radius: 50%;
     background-color: black;
