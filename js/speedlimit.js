@@ -11,11 +11,12 @@ export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadI
                 const nearestRoad = roads[0];
                 const speedLimit = nearestRoad.tags.maxspeed || "Ukendt";
                 const roadName = nearestRoad.tags.name || nearestRoad.tags.ref || "Ukendt";
+                const roadType = nearestRoad.tags.highway || "Ukendt";
 
-                updateRoadHistory(roadHistory, { roadName, speedLimit }, 3);
+                updateRoadHistory(roadHistory, { roadName, speedLimit, roadType }, 3);
                 if (isConsistentRoadData(roadHistory)) {
-                    speedLimitDisplay.textContent = speedLimit;
-                    roadInfoDisplay.textContent = `Vej: ${roadName}`;
+                    speedLimitDisplay.textContent = `${speedLimit}`;
+                    roadInfoDisplay.textContent = `Vej: ${roadName} (${roadType})`;
                 }
             } else {
                 console.log("Ingen veje fundet i nærheden");
