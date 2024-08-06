@@ -13,18 +13,6 @@ export function deg2rad(deg) {
     return deg * (Math.PI / 180);
 }
 
-export function updateRoadHistory(roadHistory, roadData, ROAD_CHECK_THRESHOLD) {
-    if (roadHistory.length >= ROAD_CHECK_THRESHOLD) {
-        roadHistory.shift(); // Fjern det ældste opslag
-    }
-    roadHistory.push(roadData);
-}
-
-export function isConsistentRoadData(roadHistory) {
-    if (roadHistory.length < ROAD_CHECK_THRESHOLD) return false;
-    return roadHistory.every(rd => rd.roadName === roadHistory[0].roadName && rd.speedLimit === roadHistory[0].speedLimit);
-}
-
 export function calculateDirection(lat1, lon1, lat2, lon2) {
     const toRadians = (deg) => deg * Math.PI / 180;
     const toDegrees = (rad) => rad * 180 / Math.PI;
@@ -36,4 +24,16 @@ export function calculateDirection(lat1, lon1, lat2, lon2) {
     const brng = Math.atan2(y, x);
 
     return (toDegrees(brng) + 360) % 360; // Retning i grader
+}
+
+export function updateRoadHistory(roadHistory, roadData, ROAD_CHECK_THRESHOLD) {
+    if (roadHistory.length >= ROAD_CHECK_THRESHOLD) {
+        roadHistory.shift(); // Fjern det ældste opslag
+    }
+    roadHistory.push(roadData);
+}
+
+export function isConsistentRoadData(roadHistory) {
+    if (roadHistory.length < ROAD_CHECK_THRESHOLD) return false;
+    return roadHistory.every(rd => rd.roadName === roadHistory[0].roadName && rd.speedLimit === roadHistory[0].speedLimit);
 }
