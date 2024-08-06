@@ -9,14 +9,14 @@ export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadI
             const roads = response.data.elements;
             if (roads.length > 0) {
                 const nearestRoad = roads[0];
-                const speedLimit = nearestRoad.tags.maxspeed || "Ukendt";
-                const roadName = nearestRoad.tags.name || nearestRoad.tags.ref || "Ukendt";
-                const roadType = nearestRoad.tags.highway || "Ukendt";
+                const speedLimit = nearestRoad.tags.maxspeed || "";
+                const roadName = nearestRoad.tags.name || nearestRoad.tags.ref || "";
+                const roadType = nearestRoad.tags.highway || "";
 
                 updateRoadHistory(roadHistory, { roadName, speedLimit, roadType }, 3);
                 if (isConsistentRoadData(roadHistory)) {
                     speedLimitDisplay.textContent = `${speedLimit}`;
-                    roadInfoDisplay.textContent = `Vej: ${roadName} (${roadType})`;
+                    roadInfoDisplay.textContent = `${roadName} (${roadType})`;
                 }
             } else {
                 console.log("Ingen veje fundet i nærheden");
