@@ -6,8 +6,9 @@ export function initLocation(showPosition, errorCallback) {
     };
 
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(showPosition, errorCallback, options);
+        return navigator.geolocation.watchPosition(showPosition, errorCallback, options);
     } else {
         console.error("Geolocation is not supported by this browser.");
+        return null;
     }
 }
