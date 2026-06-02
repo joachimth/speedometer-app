@@ -9,8 +9,8 @@ export function checkForSpeedCameras(coordinates) {
             const cameras = response.data.elements;
             if (cameras.length > 0) {
                 const camera = cameras[0];
-                const { lat, lon } = coordinates[0];
-                const distance = getDistanceFromLatLonInKm(lat, lon, camera.lat, camera.lon);
+                const { lat, lng } = coordinates[0];
+                const distance = getDistanceFromLatLonInKm(lat, lng, camera.lat, camera.lon);
                 console.log(`Fartkamera ${distance.toFixed(1)}m væk`);
             }
         })

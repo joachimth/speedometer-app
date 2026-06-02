@@ -33,7 +33,7 @@ export function updateRoadHistory(roadHistory, roadData, ROAD_CHECK_THRESHOLD) {
     roadHistory.push(roadData);
 }
 
-export function isConsistentRoadData(roadHistory) {
-    if (roadHistory.length < ROAD_CHECK_THRESHOLD) return false;
+export function isConsistentRoadData(roadHistory, threshold = 3) {
+    if (roadHistory.length < threshold) return false;
     return roadHistory.every(rd => rd.roadName === roadHistory[0].roadName && rd.speedLimit === roadHistory[0].speedLimit);
 }
