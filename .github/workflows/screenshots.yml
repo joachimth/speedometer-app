@@ -7,7 +7,7 @@ on:
       - 'index.html'
       - 'css/**'
       - 'js/**'
-      - 'capture-screenshots.js'
+      - 'capture-screenshots.py'
   workflow_dispatch:
 
 permissions:
@@ -20,16 +20,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
       - name: Install Playwright
-        run: npx --yes playwright install --with-deps chromium
+        run: pip install playwright && python3 -m playwright install --with-deps chromium
 
       - name: Capture screenshots
-        run: node capture-screenshots.js
+        run: python3 capture-screenshots.py
 
       - name: Commit screenshots
         run: |
