@@ -1,6 +1,7 @@
 import { initLocation } from './location.js';
 import { getSpeedLimit } from './speedlimit.js';
 import { checkForSpeedCameras } from './speedcamera.js';
+import { calculateDirection } from './helpers.js';
 // import { getTrafficAlerts } from './trafikinfo.js'; // Disabled for now
 
 document.addEventListener("DOMContentLoaded", function() {

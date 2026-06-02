@@ -1,48 +1,61 @@
 # Speedometer App
 
-A simple, web-based speedometer app that displays the user's current speed in km/h. The app uses the device's GPS to determine speed and is designed to work on both Apple iPhone and Android-based mobile phones.
+A Progressive Web App (PWA) speedometer for mobile devices. Shows your current GPS speed in km/h, the speed limit for the road you're on, and warns about nearby speed cameras — all from OpenStreetMap data, no API key required.
+
+**Live app:** [joachimth.github.io/speedometer-app](https://joachimth.github.io/speedometer-app)
+
+---
 
 ## Features
 
-- Displays speed in km/h with large white numbers on a black background.
-- Utilizes the device's GPS to determine the current speed.
-- Keeps the screen on at all times during use.
-- Responsive design for compatibility with various devices.
-- Deployed using GitHub Actions to GitHub Pages.
+- Large speed display in km/h (GPS-based)
+- Speed limit for current road via OpenStreetMap / Overpass API
+- Road name display
+- Speed camera proximity alerts (OSM `highway=speed_camera` nodes, 500 m radius)
+- Install as PWA on iOS and Android (standalone fullscreen mode)
+- Landscape layout support
+- No account, no API key, no tracking
 
-## Prerequisites
+---
 
-Before you begin, ensure you have met the following requirements:
-- A modern web browser on your mobile device that supports HTML5 and the Geolocation API.
-- Internet connection for initial loading of the app.
+## How to use
 
-## Using Speedometer App
+1. Open [the app](https://joachimth.github.io/speedometer-app) in Chrome or Safari on your phone
+2. Allow location access when prompted
+3. Tap the ▶ button to start
+4. Drive — speed updates in real time, speed limit loads after a few GPS fixes
 
-To use the Speedometer App, follow these steps:
-1. Visit [Speedometer App](https://joachimth.github.io/speedometer-app) on your mobile device.
-2. Allow the app to access your device's location services.
-3. The app will display your current speed in km/h.
+To install as an app: use "Add to Home Screen" in your browser.
 
-## Contributing to Speedometer App
+---
 
-To contribute to Speedometer App, follow these steps:
-1. Fork this repository.
-2. Create a branch: `git checkout -b <branch_name>`.
-3. Make your changes and commit them: `git commit -m '<commit_message>'`
-4. Push to the original branch: `git push origin <project_name>/<location>`
-5. Create the pull request.
+## Architecture
 
-Alternatively, see the GitHub documentation on [creating a pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+Static PWA — no build step, no server. All files served directly via GitHub Pages.
 
-## Contributors
+```
+index.html          Entry point + PWA manifest link
+css/style.css       Dark theme, responsive layout
+js/
+  main.js           App init, GPS loop, DOM updates
+  location.js       navigator.geolocation wrapper
+  speedlimit.js     Overpass API query for maxspeed tag
+  speedcamera.js    Overpass API query for speed cameras
+  helpers.js        Haversine distance, direction, road history
+  trafikinfo.js     Traffic alerts (disabled, needs API key)
+manifest.json       PWA metadata
+```
 
-Thanks to the following people who have contributed to this project:
-- [@joachimth](https://github.com/joachimth)
+External dependency: [axios](https://unpkg.com/axios@1.1.2) loaded from CDN.
 
-## Contact
+---
 
-If you want to contact me, you can reach me at [GitHub](https://github.com/joachimth).
+## CI/CD
+
+Pushes to `main` automatically deploy to GitHub Pages via [JamesIves/github-pages-deploy-action](https://github.com/JamesIves/github-pages-deploy-action).
+
+---
 
 ## License
 
-This project uses the following license: [MIT License](https://opensource.org/licenses/MIT).
+[MIT](LICENSE)
