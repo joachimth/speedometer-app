@@ -1,36 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
-
-    <!-- Apple-særskilte meta-tags for ikoner -->
     <link rel="apple-touch-icon" href="ressources/apple-touch-icon.png">
     <meta name="apple-mobile-web-app-title" content="Speedometer">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
     <link rel="manifest" href="manifest.json">
     <title>Speedometer</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="flex-center">
-    <div id="speed">00</div>
-</div>
 
-<div class="flex-right">
-    <div id="speedlimit">000</div>
-</div>
+    <header class="topbar">
+        <div class="gps-status">
+            <span class="gps-dot" id="gps-dot"></span>
+            <span class="gps-label" id="gps-label">Venter</span>
+        </div>
+        <span class="app-title">SPEEDOMETER</span>
+    </header>
 
-<div class="container">
-    <div id="roadinfo" class="mediumtext" style="margin-bottom: 18%"></div>
-    <button id="clickme" class="start" aria-label="Start">
-        <span id="icon-start">&#9654;</span>
-        <span id="icon-ok" style="display:none">&#10003;</span>
-    </button>
-</div>
+    <main class="speed-section">
+        <div class="speed-wrap">
+            <div id="speed">00</div>
+            <div class="unit">km/h</div>
+        </div>
+    </main>
+
+    <section class="info-section">
+        <div id="speedlimit">000</div>
+        <div class="road-wrap">
+            <div id="roadinfo"></div>
+        </div>
+    </section>
+
+    <footer class="controls">
+        <button id="clickme" class="start-btn" aria-label="Start">
+            <span id="icon-start">&#9654;</span>
+            <span id="icon-ok" style="display:none">&#9646;&#9646;</span>
+        </button>
+    </footer>
 
     <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
     <script type="module" src="js/main.js"></script>
