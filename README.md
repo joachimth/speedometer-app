@@ -6,12 +6,21 @@ A Progressive Web App (PWA) speedometer for mobile devices. Shows your current G
 
 ---
 
+## Screenshots
+
+| Portrait – startskærm | Portrait – kørende | Landscape – kørende |
+|:-:|:-:|:-:|
+| ![Startskærm](screenshots/portrait-idle.png) | ![Kørende](screenshots/portrait-driving.png) | ![Landscape](screenshots/landscape-driving.png) |
+
+---
+
 ## Features
 
 - Large speed display in km/h (GPS-based)
 - Speed limit for current road via OpenStreetMap / Overpass API
 - Road name display
 - Speed camera proximity alerts (OSM `highway=speed_camera` nodes, 500 m radius)
+- Screen stays on while driving (`navigator.wakeLock`)
 - Install as PWA on iOS and Android (standalone fullscreen mode)
 - Landscape layout support
 - No account, no API key, no tracking
@@ -37,13 +46,14 @@ Static PWA — no build step, no server. All files served directly via GitHub Pa
 index.html          Entry point + PWA manifest link
 css/style.css       Dark theme, responsive layout
 js/
-  main.js           App init, GPS loop, DOM updates
+  main.js           App init, GPS loop, wake lock, DOM updates
   location.js       navigator.geolocation wrapper
   speedlimit.js     Overpass API query for maxspeed tag
   speedcamera.js    Overpass API query for speed cameras
   helpers.js        Haversine distance, direction, road history
   trafikinfo.js     Traffic alerts (disabled, needs API key)
 manifest.json       PWA metadata
+capture-screenshots.js  Playwright screenshot automation (CI)
 ```
 
 External dependency: [axios](https://unpkg.com/axios@1.1.2) loaded from CDN.
@@ -52,7 +62,12 @@ External dependency: [axios](https://unpkg.com/axios@1.1.2) loaded from CDN.
 
 ## CI/CD
 
-Pushes to `main` automatically deploy to GitHub Pages via [JamesIves/github-pages-deploy-action](https://github.com/JamesIves/github-pages-deploy-action).
+| Workflow | Trigger | Action |
+|---|---|---|
+| `deploy.yml` | Push to `main` | Deploy to GitHub Pages |
+| `screenshots.yml` | Push to `main` (UI files changed) | Capture screenshots, commit to repo |
+
+Screenshots are generated automatically by a headless Playwright browser with injected simulated GPS data. No manual updates needed.
 
 ---
 

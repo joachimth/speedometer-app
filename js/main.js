@@ -17,17 +17,47 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let collectedCoordinates = [];
     const SOME_THRESHOLD = 12;
-    const ROAD_CHECK_THRESHOLD = 3; // Antal af ens vejopslag
-    let roadHistory = []; // Holder de seneste vejopslag
+    const ROAD_CHECK_THRESHOLD = 3;
+    let roadHistory = [];
     let $watchHandler_showPosition = null;
+    let wakeLock = null;
+
+    // Re-acquire wake lock when page becomes visible again
+    document.addEventListener('visibilitychange', async () => {
+        if (document.visibilityState === 'visible' && $watchHandler_showPosition !== null) {
+            await requestWakeLock();
+        }
+    });
+
+    async function requestWakeLock() {
+        if ('wakeLock' in navigator) {
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+            } catch (err) {
+                console.warn('Wake lock request failed:', err);
+            }
+        }
+    }
+
+    async function releaseWakeLock() {
+        if (wakeLock) {
+            try {
+                await wakeLock.release();
+            } catch (err) {
+                console.warn('Wake lock release failed:', err);
+            }
+            wakeLock = null;
+        }
+    }
 
     button.addEventListener("click", manualStart);
 
-    function manualStart() {
+    async function manualStart() {
         if ($watchHandler_showPosition === null) {
             $watchHandler_showPosition = initLocation(showPosition, errorCallback);
             document.getElementById("icon-start").style.display = "none";
             document.getElementById("icon-ok").style.display = "inline-block";
+            await requestWakeLock();
         }
     }
 
@@ -55,5 +85,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function errorCallback(error) {
         console.error("Geolocation error:", error);
+        releaseWakeLock();
     }
 });
