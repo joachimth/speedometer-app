@@ -1,6 +1,6 @@
 import { updateRoadHistory, isConsistentRoadData } from './helpers.js';
 
-export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadInfoDisplay) {
+export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadInfoDisplay, onLimitUpdate) {
     const query = coordinates.map(coord => `way(around:30,${coord.lat},${coord.lng})["highway"];`).join('');
     const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(${query});out body;`;
 
@@ -10,13 +10,14 @@ export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadI
             if (roads.length > 0) {
                 const nearestRoad = roads[0];
                 const speedLimit = nearestRoad.tags.maxspeed || "";
-                const roadName = nearestRoad.tags.name || nearestRoad.tags.ref || "";
-                const roadType = nearestRoad.tags.highway || "";
+                const roadName   = nearestRoad.tags.name || nearestRoad.tags.ref || "";
+                const roadType   = nearestRoad.tags.highway || "";
 
                 updateRoadHistory(roadHistory, { roadName, speedLimit, roadType }, 3);
                 if (isConsistentRoadData(roadHistory)) {
-                    speedLimitDisplay.textContent = `${speedLimit}`;
-                    roadInfoDisplay.textContent = `${roadName} (${roadType})`;
+                    speedLimitDisplay.textContent = speedLimit || "–";
+                    roadInfoDisplay.textContent   = roadName ? `${roadName} (${roadType})` : roadType;
+                    if (typeof onLimitUpdate === 'function') onLimitUpdate(speedLimit);
                 }
             } else {
                 console.log("Ingen veje fundet i nærheden");
