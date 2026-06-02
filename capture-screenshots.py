@@ -20,7 +20,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
     def log_message(self, *args):
-        pass  # silence request logs
+        pass
 
 def start_server():
     server = HTTPServer(("localhost", PORT), QuietHandler)
@@ -44,9 +44,9 @@ def inject_state(page, speed, limit, road, started):
 
 # ─── Scenarios ────────────────────────────────────────────────────────────────
 SCENARIOS = [
-    dict(name="portrait-idle",     w=390, h=844, speed="00",  limit="000", road="",                        started=False),
-    dict(name="portrait-driving",  w=390, h=844, speed="72",  limit="80",  road="Kongevej (tertiary)",      started=True),
-    dict(name="landscape-driving", w=844, h=390, speed="108", limit="130", road="E20 Motorvej (motorway)", started=True),
+    dict(name="portrait-idle",     w=390, h=844, speed="00",  limit="000", road="",                          started=False),
+    dict(name="portrait-driving",  w=390, h=844, speed="72",  limit="80",  road="Kongevej (tertiary)",        started=True),
+    dict(name="landscape-driving", w=844, h=390, speed="108", limit="130", road="E20 Motorvej (motorway)",    started=True),
 ]
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
@@ -64,19 +64,22 @@ def main():
                 device_scale_factor=2,
             )
 
-            # Stub axios so it doesn't block on CDN
-            ctx.route("**unpkg.com**", lambda route: route.fulfill(
+            # Stub axios so network calls don't hang
+            ctx.route("**/unpkg.com/**", lambda route: route.fulfill(
                 status=200,
                 content_type="application/javascript",
                 body="window.axios = { get: () => Promise.resolve({ data: { elements: [] } }) };"
             ))
+            # Allow Google Fonts through (needed for font rendering)
+            # Everything else blocked by default in Playwright - fonts are fetched via CSS @import
 
             page = ctx.new_page()
-            page.goto(f"http://localhost:{PORT}/", wait_until="domcontentloaded")
-            page.wait_for_timeout(400)
+            page.goto(f"http://localhost:{PORT}/", wait_until="networkidle")
+            # Wait for fonts to load
+            page.wait_for_timeout(800)
 
             inject_state(page, s["speed"], s["limit"], s["road"], s["started"])
-            page.wait_for_timeout(150)
+            page.wait_for_timeout(200)
 
             out_path = OUT / f"{s['name']}.png"
             page.screenshot(path=str(out_path))
