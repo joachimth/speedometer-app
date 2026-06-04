@@ -5,25 +5,25 @@
   "homepage": "https://joachimth.github.io/speedometer-app",
   "icons": [
     {
-      "src": "ressources/icon-192.png",
+      "src": "/speedometer-app/ressources/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "ressources/icon-192.png",
+      "src": "/speedometer-app/ressources/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "ressources/icon-512.png",
+      "src": "/speedometer-app/ressources/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "ressources/icon-512.png",
+      "src": "/speedometer-app/ressources/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
