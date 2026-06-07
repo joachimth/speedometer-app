@@ -30,8 +30,8 @@ export function checkForSpeedCameras(coordinates) {
     lastCameraLng = latest.lng;
     cameraInFlight = true;
 
-    const query = `node(around:500,${latest.lat},${latest.lng})["highway"="speed_camera"];`;
-    const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(${query});out body;`;
+    const query = `[out:json];(node(around:500,${latest.lat},${latest.lng})["highway"="speed_camera"];);out body;`;
+    const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
 
     axios.get(overpassUrl)
         .then(response => {
