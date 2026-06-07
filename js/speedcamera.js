@@ -36,15 +36,18 @@ function loadDkCameras() {
     fetch('./data/dk-speed-cameras.json')
         .then(r => r.json())
         .then(data => {
-            // Normalize to { lat, lng, name, maxspeed, direction }
+            // Preserve status field: 'aktiv' (default) or 'planlagt'
             dkCameras = data.cameras.map(c => ({
                 lat: c.lat, lng: c.lng,
                 name: c.name,
                 road: c.road,
                 maxspeed: c.maxspeed,
-                direction: c.direction
+                direction: c.direction,
+                status: c.status || 'aktiv'  // no status field = confirmed/active
             }));
-            console.log(`[Fartkamera] ${dkCameras.length} danske ATK-kameraer indlæst`);
+            const confirmed = dkCameras.filter(c => c.status === 'aktiv').length;
+            const planned   = dkCameras.filter(c => c.status === 'planlagt').length;
+            console.log(`[Fartkamera] ${dkCameras.length} DK ATK-kameraer indlæst (${confirmed} aktive, ${planned} planlagte)`);
         })
         .catch(err => {
             console.warn("[Fartkamera] Kunne ikke indlæse dk-speed-cameras.json:", err.message);
@@ -84,22 +87,20 @@ function fetchOsmCache(lat, lng) {
         .finally(() => { osmInFlight = false; });
 }
 
-function checkNearby(cameras, lat, lng, nameKey = 'name', lngKey = 'lng') {
-    const nearby = cameras
+// Returns the closest camera within ALERT_RADIUS, or null.
+// For DK cameras: respects status field ('aktiv' | 'planlagt').
+// For OSM cameras: treated as 'aktiv'.
+function findClosest(cameras, lat, lng, lngKey = 'lng') {
+    return cameras
         .map(c => ({ ...c, distance: haversineMeters(lat, lng, c.lat, c[lngKey] ?? c.lon) }))
         .filter(c => c.distance <= ALERT_RADIUS)
-        .sort((a, b) => a.distance - b.distance);
-
-    nearby.forEach((c, i) => {
-        const name = c[nameKey] || c.tags?.name || 'ukendt';
-        const dir  = c.direction ?? c.tags?.direction ?? '?';
-        const spd  = c.maxspeed ?? c.tags?.maxspeed ?? '?';
-        console.log(`[Fartkamera] ⚠ #${i + 1}: ${c.distance.toFixed(0)}m | ${name} | max: ${spd} | retning: ${dir}`);
-    });
-    return nearby.length;
+        .sort((a, b) => a.distance - b.distance)[0] ?? null;
 }
 
-export function checkForSpeedCameras(coordinates) {
+// onCameraWarning(info | null)
+//   info = { type: 'confirmed'|'planned', distance, name, maxspeed }
+//   null = no camera nearby (clear warning)
+export function checkForSpeedCameras(coordinates, onCameraWarning) {
     // Start loading static DK cameras on first call
     if (!dkLoadAttempted) loadDkCameras();
 
@@ -111,8 +112,32 @@ export function checkForSpeedCameras(coordinates) {
             console.log("[Fartkamera] DK-data endnu ikke indlæst - vent...");
             return;
         }
-        const found = checkNearby(dkCameras, latest.lat, latest.lng);
-        if (found === 0) console.log(`[Fartkamera] Ingen DK ATK-kameraer inden for ${ALERT_RADIUS}m`);
+
+        // Check confirmed first - takes priority
+        const confirmed = findClosest(
+            dkCameras.filter(c => c.status === 'aktiv'),
+            latest.lat, latest.lng
+        );
+        if (confirmed) {
+            console.log(`[Fartkamera] ⚠ BEKRÆFTET ATK: ${confirmed.distance.toFixed(0)}m | ${confirmed.name} | max: ${confirmed.maxspeed}`);
+            onCameraWarning?.({ type: 'confirmed', distance: confirmed.distance, name: confirmed.name, maxspeed: confirmed.maxspeed });
+            return;
+        }
+
+        // Check planned cameras - softer
+        const planned = findClosest(
+            dkCameras.filter(c => c.status === 'planlagt'),
+            latest.lat, latest.lng
+        );
+        if (planned) {
+            console.log(`[Fartkamera] ~ PLANLAGT ATK (2027): ${planned.distance.toFixed(0)}m | ${planned.name} | max: ${planned.maxspeed}`);
+            onCameraWarning?.({ type: 'planned', distance: planned.distance, name: planned.name, maxspeed: planned.maxspeed });
+            return;
+        }
+
+        console.log(`[Fartkamera] Ingen DK ATK-kameraer inden for ${ALERT_RADIUS}m`);
+        onCameraWarning?.(null);
+
     } else {
         // Outside Denmark: use OSM cache
         if (cacheCenterLat === null) {
@@ -124,9 +149,19 @@ export function checkForSpeedCameras(coordinates) {
             console.log(`[Fartkamera] Kørt ${distFromCenter.toFixed(0)}m fra OSM cache-centrum - henter nyt`);
             fetchOsmCache(latest.lat, latest.lng);
         }
-        if (osmCache.length > 0) {
-            const found = checkNearby(osmCache, latest.lat, latest.lng, 'tags', 'lon');
-            if (found === 0) console.log(`[Fartkamera] Ingen OSM kameraer inden for ${ALERT_RADIUS}m`);
+
+        const closest = osmCache.length > 0
+            ? findClosest(osmCache, latest.lat, latest.lng, 'lon')
+            : null;
+
+        if (closest) {
+            const name = closest.tags?.name || closest.tags?.operator || 'Fartkamera';
+            const spd  = closest.tags?.maxspeed ?? '?';
+            console.log(`[Fartkamera] ⚠ OSM: ${closest.distance.toFixed(0)}m | ${name} | max: ${spd}`);
+            onCameraWarning?.({ type: 'confirmed', distance: closest.distance, name, maxspeed: spd });
+        } else {
+            console.log(`[Fartkamera] Ingen OSM kameraer inden for ${ALERT_RADIUS}m`);
+            onCameraWarning?.(null);
         }
     }
 }
