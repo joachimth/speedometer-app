@@ -5,16 +5,45 @@ import { calculateDirection } from './helpers.js';
 // import { getTrafficAlerts } from './trafikinfo.js'; // Disabled for now
 
 document.addEventListener("DOMContentLoaded", function() {
-    const speedDisplay      = document.getElementById('speed');
-    const speedLimitDisplay = document.getElementById('speedlimit');
-    const roadInfoDisplay   = document.getElementById('roadinfo');
-    const button            = document.getElementById('clickme');
-    const gpsDot            = document.getElementById('gps-dot');
-    const gpsLabel          = document.getElementById('gps-label');
+    const speedDisplay       = document.getElementById('speed');
+    const speedLimitDisplay  = document.getElementById('speedlimit');
+    const roadInfoDisplay    = document.getElementById('roadinfo');
+    const cameraWarningEl    = document.getElementById('camera-warning');
+    const button             = document.getElementById('clickme');
+    const gpsDot             = document.getElementById('gps-dot');
+    const gpsLabel           = document.getElementById('gps-label');
 
     if (!speedDisplay || !speedLimitDisplay || !roadInfoDisplay || !button) {
         console.error("Nødvendige DOM-elementer blev ikke fundet.");
         return;
+    }
+
+    let cameraWarningTimer = null;
+
+    function onCameraWarning(info) {
+        if (!cameraWarningEl) return;
+        if (!info) {
+            // Clear warning
+            cameraWarningEl.classList.add('hidden');
+            cameraWarningEl.classList.remove('confirmed', 'planned');
+            cameraWarningEl.textContent = '';
+            return;
+        }
+        const dist = Math.round(info.distance);
+        const spd  = info.maxspeed ? ` · ${info.maxspeed} km/t` : '';
+        if (info.type === 'confirmed') {
+            cameraWarningEl.textContent = `⚠ ATK ${dist}m${spd}`;
+            cameraWarningEl.className   = 'camera-warning confirmed';
+        } else {
+            cameraWarningEl.textContent = `~ ATK planlagt ${dist}m${spd}`;
+            cameraWarningEl.className   = 'camera-warning planned';
+        }
+        // Auto-clear after 30s if no new update arrives
+        clearTimeout(cameraWarningTimer);
+        cameraWarningTimer = setTimeout(() => {
+            cameraWarningEl.classList.add('hidden');
+            cameraWarningEl.classList.remove('confirmed', 'planned');
+        }, 30000);
     }
 
     let collectedCoordinates = [];
@@ -95,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (collectedCoordinates.length >= SOME_THRESHOLD) {
             getSpeedLimit(collectedCoordinates, roadHistory, speedLimitDisplay, roadInfoDisplay, onSpeedLimitUpdate);
-            checkForSpeedCameras(collectedCoordinates);
+            checkForSpeedCameras(collectedCoordinates, onCameraWarning);
             collectedCoordinates = [];
         }
     }
