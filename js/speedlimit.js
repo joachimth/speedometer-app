@@ -40,8 +40,8 @@ export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadI
     lastFetchLng = latest.lng;
     inFlight = true;
 
-    const query = `way(around:30,${latest.lat},${latest.lng})["highway"];`;
-    const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(${query});out body;`;
+    const query = `[out:json];(way(around:30,${latest.lat},${latest.lng})["highway"];);out body;`;
+    const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
 
     axios.get(overpassUrl)
         .then(response => {
