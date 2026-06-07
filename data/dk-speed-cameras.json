@@ -18,7 +18,9 @@
       "lng": 12.3296798,
       "maxspeed": 70,
       "direction": 145,
-      "source": "OSM node 5948339474, operator=Vejdirektoratet, start_date=2018-10-02"
+      "source": "OSM node 5948339474, operator=Vejdirektoratet, start_date=2018-10-02",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-01b",
@@ -28,8 +30,10 @@
       "lat": 55.7455344,
       "lng": 12.3261599,
       "maxspeed": 70,
-      "direction": null,
-      "source": "OSM node 5948353766, operator=Vejdirektoratet, start_date=2018-10-02"
+      "direction": 115,
+      "source": "OSM node 5948353766, operator=Vejdirektoratet, start_date=2018-10-02",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-02a",
@@ -40,7 +44,9 @@
       "lng": 12.3592999,
       "maxspeed": 70,
       "direction": 250,
-      "source": "OSM node 6774292460, description=ATK Stander (Stærekasse)"
+      "source": "OSM node 6774292460, description=ATK Stander (Stærekasse)",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-02b",
@@ -51,7 +57,9 @@
       "lng": 12.3652987,
       "maxspeed": 70,
       "direction": 60,
-      "source": "OSM node 6774292461, description=ATK Stander (Stærekasse)"
+      "source": "OSM node 6774292461, description=ATK Stander (Stærekasse)",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-03a",
@@ -62,7 +70,9 @@
       "lng": 11.4163211,
       "maxspeed": 80,
       "direction": 110,
-      "source": "OSM node 6774288816, operator=Vejdirektoratet"
+      "source": "OSM node 6774288816, operator=Vejdirektoratet",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-03b",
@@ -72,8 +82,10 @@
       "lat": 55.3712869,
       "lng": 11.4074591,
       "maxspeed": 80,
-      "direction": null,
-      "source": "OSM node 6774288815"
+      "direction": 116,
+      "source": "OSM node 6774288815",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-04a",
@@ -84,7 +96,9 @@
       "lng": 11.8696979,
       "maxspeed": 60,
       "direction": 5,
-      "source": "OSM node 6774330059, description=ATK Stander (Stærekasse)"
+      "source": "OSM node 6774330059, description=ATK Stander (Stærekasse)",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-05a",
@@ -95,7 +109,9 @@
       "lng": 10.3522798,
       "maxspeed": 50,
       "direction": 320,
-      "source": "OSM node 6774226498"
+      "source": "OSM node 6774226498",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-05b",
@@ -106,7 +122,9 @@
       "lng": 10.3495529,
       "maxspeed": 50,
       "direction": 300,
-      "source": "OSM node 7687300231"
+      "source": "OSM node 7687300231",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-06a",
@@ -117,7 +135,9 @@
       "lng": 8.519373,
       "maxspeed": 80,
       "direction": 270,
-      "source": "OSM node 6774350774"
+      "source": "OSM node 6774350774",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-06b",
@@ -128,7 +148,9 @@
       "lng": 8.5464875,
       "maxspeed": 80,
       "direction": 110,
-      "source": "OSM node 8497567550, operator=Vejdirektoratet"
+      "source": "OSM node 8497567550, operator=Vejdirektoratet",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-07a",
@@ -138,8 +160,10 @@
       "lat": 56.0826722,
       "lng": 8.3971602,
       "maxspeed": 80,
-      "direction": null,
-      "source": "OSM node 6001305059, operator=Vejdirektoratet, start_date=2018-12-03"
+      "direction": 268,
+      "source": "OSM node 6001305059, operator=Vejdirektoratet, start_date=2018-12-03",
+      "type": "ATK",
+      "expected_active": "2018-12-03"
     },
     {
       "id": "atk-07b",
@@ -149,8 +173,10 @@
       "lat": 56.0825679,
       "lng": 8.3922076,
       "maxspeed": 80,
-      "direction": null,
-      "source": "OSM node 6001319018, operator=Vejdirektoratet, start_date=2018-12-03"
+      "direction": 88,
+      "source": "OSM node 6001319018, operator=Vejdirektoratet, start_date=2018-12-03",
+      "type": "ATK",
+      "expected_active": "2018-12-03"
     },
     {
       "id": "atk-08a",
@@ -160,8 +186,10 @@
       "lat": 56.2002315,
       "lng": 10.2411937,
       "maxspeed": 80,
-      "direction": null,
-      "source": "OSM node 6774285411"
+      "direction": 135,
+      "source": "OSM node 6774285411",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-08b",
@@ -171,8 +199,10 @@
       "lat": 56.2003239,
       "lng": 10.2411252,
       "maxspeed": 80,
-      "direction": null,
-      "source": "OSM node 6774285412"
+      "direction": 315,
+      "source": "OSM node 6774285412",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-09a",
@@ -183,7 +213,9 @@
       "lng": 8.8001575,
       "maxspeed": 70,
       "direction": 145,
-      "source": "OSM node 6774274892"
+      "source": "OSM node 6774274892",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-09b",
@@ -194,7 +226,9 @@
       "lng": 8.7971561,
       "maxspeed": 70,
       "direction": 330,
-      "source": "OSM node 10934032484"
+      "source": "OSM node 10934032484",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-10a",
@@ -204,8 +238,10 @@
       "lat": 57.1431562,
       "lng": 9.760332,
       "maxspeed": 80,
-      "direction": null,
-      "source": "OSM node 6774324006"
+      "direction": 137,
+      "source": "OSM node 6774324006",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-10b",
@@ -215,8 +251,10 @@
       "lat": 57.1429674,
       "lng": 9.7606558,
       "maxspeed": 80,
-      "direction": null,
-      "source": "OSM node 6774324007"
+      "direction": 317,
+      "source": "OSM node 6774324007",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-11a",
@@ -226,8 +264,10 @@
       "lat": 57.4330643,
       "lng": 10.0287024,
       "maxspeed": 70,
-      "direction": null,
-      "source": "OSM node 6774327940"
+      "direction": 141,
+      "source": "OSM node 6774327940",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-11b",
@@ -237,8 +277,10 @@
       "lat": 57.4243807,
       "lng": 10.0416715,
       "maxspeed": 80,
-      "direction": null,
-      "source": "OSM node 6774331891"
+      "direction": 321,
+      "source": "OSM node 6774331891",
+      "type": "ATK",
+      "expected_active": "2018-10-02"
     },
     {
       "id": "atk-12a",
@@ -248,8 +290,10 @@
       "lat": 57.059071,
       "lng": 9.953137,
       "maxspeed": 130,
-      "direction": null,
-      "source": "SCDB #203666 (A+, status confirmed), cross-validated 2026-06-07"
+      "direction": 132,
+      "source": "SCDB #203666 (A+, status confirmed), cross-validated 2026-06-07",
+      "type": "ATK",
+      "expected_active": "2018"
     },
     {
       "id": "atk-12b",
@@ -259,8 +303,10 @@
       "lat": 57.053387,
       "lng": 9.964587,
       "maxspeed": 130,
-      "direction": null,
-      "source": "SCDB #203667 (A+, status confirmed), cross-validated 2026-06-07"
+      "direction": 312,
+      "source": "SCDB #203667 (A+, status confirmed), cross-validated 2026-06-07",
+      "type": "ATK",
+      "expected_active": "2018"
     },
     {
       "id": "atk-13a",
@@ -270,8 +316,10 @@
       "lat": 55.344608,
       "lng": 11.05698,
       "maxspeed": 130,
-      "direction": null,
-      "source": "SCDB synthetic cluster (A+, bidirectional pair), cross-validated 2026-06-07. Ej i OSM."
+      "direction": 270,
+      "source": "SCDB synthetic cluster (A+, bidirectional pair), cross-validated 2026-06-07. Ej i OSM.",
+      "type": "ATK",
+      "expected_active": "2018"
     },
     {
       "id": "atk-13b",
@@ -281,8 +329,10 @@
       "lat": 55.344608,
       "lng": 11.05698,
       "maxspeed": 130,
-      "direction": null,
-      "source": "SCDB synthetic cluster (A+, bidirectional pair), cross-validated 2026-06-07. Ej i OSM."
+      "direction": 90,
+      "source": "SCDB synthetic cluster (A+, bidirectional pair), cross-validated 2026-06-07. Ej i OSM.",
+      "type": "ATK",
+      "expected_active": "2018"
     },
     {
       "id": "atk-14a",
@@ -292,8 +342,10 @@
       "lat": 55.349617,
       "lng": 11.097924,
       "maxspeed": 130,
-      "direction": null,
-      "source": "SCDB #181410 (A+, E20 Region Syddanmark), cross-validated 2026-06-07. Ej i OSM."
+      "direction": 250,
+      "source": "SCDB #181410 (A+, E20 Region Syddanmark), cross-validated 2026-06-07. Ej i OSM.",
+      "type": "ATK",
+      "expected_active": "2018"
     },
     {
       "id": "atk-14b",
@@ -303,8 +355,10 @@
       "lat": 55.349491,
       "lng": 11.097323,
       "maxspeed": 130,
-      "direction": null,
-      "source": "SCDB synthetic cluster near #181410 (A+), cross-validated 2026-06-07. Ej i OSM."
+      "direction": 70,
+      "source": "SCDB synthetic cluster near #181410 (A+), cross-validated 2026-06-07. Ej i OSM.",
+      "type": "ATK",
+      "expected_active": "2018"
     },
     {
       "id": "plan-01a",
@@ -314,9 +368,11 @@
       "lat": 55.54,
       "lng": 8.59,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 30,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-01b",
@@ -326,9 +382,11 @@
       "lat": 55.542,
       "lng": 8.592,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 210,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-02a",
@@ -338,9 +396,11 @@
       "lat": 55.42,
       "lng": 8.73,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 30,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-02b",
@@ -350,9 +410,11 @@
       "lat": 55.422,
       "lng": 8.732,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 210,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-03a",
@@ -362,9 +424,11 @@
       "lat": 57.08,
       "lng": 8.97,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-03b",
@@ -374,9 +438,11 @@
       "lat": 57.082,
       "lng": 8.972,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-04a",
@@ -386,9 +452,11 @@
       "lat": 57.12,
       "lng": 9.5,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 28,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-04b",
@@ -398,9 +466,11 @@
       "lat": 57.122,
       "lng": 9.502,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 208,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-05a",
@@ -410,9 +480,11 @@
       "lat": 56.0,
       "lng": 8.76,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-05b",
@@ -422,9 +494,11 @@
       "lat": 56.002,
       "lng": 8.762,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-06a",
@@ -434,9 +508,11 @@
       "lat": 56.435,
       "lng": 10.44,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-06b",
@@ -446,9 +522,11 @@
       "lat": 56.437,
       "lng": 10.442,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-07a",
@@ -458,9 +536,11 @@
       "lat": 56.22,
       "lng": 8.43,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-07b",
@@ -470,9 +550,11 @@
       "lat": 56.222,
       "lng": 8.432,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-08a",
@@ -482,9 +564,11 @@
       "lat": 55.6,
       "lng": 8.69,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-08b",
@@ -494,9 +578,11 @@
       "lat": 55.602,
       "lng": 8.692,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-09a",
@@ -506,9 +592,11 @@
       "lat": 56.35,
       "lng": 9.01,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-09b",
@@ -518,9 +606,11 @@
       "lat": 56.352,
       "lng": 9.012,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-10a",
@@ -530,9 +620,11 @@
       "lat": 55.26,
       "lng": 10.26,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 30,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-10b",
@@ -542,9 +634,11 @@
       "lat": 55.262,
       "lng": 10.262,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 210,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-11a",
@@ -554,9 +648,11 @@
       "lat": 55.08,
       "lng": 10.44,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 30,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-11b",
@@ -566,9 +662,11 @@
       "lat": 55.082,
       "lng": 10.442,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 210,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-12a",
@@ -578,9 +676,11 @@
       "lat": 55.57,
       "lng": 11.6,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-12b",
@@ -590,9 +690,11 @@
       "lat": 55.572,
       "lng": 11.602,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-13a",
@@ -602,9 +704,11 @@
       "lat": 55.78,
       "lng": 11.88,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-13b",
@@ -614,9 +718,11 @@
       "lat": 55.782,
       "lng": 11.882,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-14a",
@@ -626,9 +732,11 @@
       "lat": 55.07,
       "lng": 14.97,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 30,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "plan-14b",
@@ -638,9 +746,11 @@
       "lat": 55.072,
       "lng": 14.972,
       "maxspeed": 80,
-      "direction": null,
+      "direction": 210,
       "status": "planlagt",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "type": "ATK",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-01a",
@@ -650,10 +760,11 @@
       "lat": 55.31,
       "lng": 10.81,
       "maxspeed": 130,
-      "direction": null,
+      "direction": 30,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-01b",
@@ -663,10 +774,11 @@
       "lat": 55.312,
       "lng": 10.812,
       "maxspeed": 130,
-      "direction": null,
+      "direction": 210,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-02a",
@@ -676,10 +788,11 @@
       "lat": 55.63,
       "lng": 12.29,
       "maxspeed": 110,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-02b",
@@ -689,10 +802,11 @@
       "lat": 55.632,
       "lng": 12.292,
       "maxspeed": 110,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-03a",
@@ -702,10 +816,11 @@
       "lat": 55.67,
       "lng": 12.5,
       "maxspeed": 110,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-03b",
@@ -715,10 +830,11 @@
       "lat": 55.672,
       "lng": 12.502,
       "maxspeed": 110,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-04a",
@@ -728,10 +844,11 @@
       "lat": 55.712,
       "lng": 9.778,
       "maxspeed": 110,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-04b",
@@ -741,10 +858,11 @@
       "lat": 55.714,
       "lng": 9.78,
       "maxspeed": 110,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-05a",
@@ -754,10 +872,11 @@
       "lat": 55.73,
       "lng": 12.4,
       "maxspeed": 110,
-      "direction": null,
+      "direction": 29,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     },
     {
       "id": "motorvej-05b",
@@ -767,10 +886,11 @@
       "lat": 55.732,
       "lng": 12.402,
       "maxspeed": 110,
-      "direction": null,
+      "direction": 209,
       "status": "planlagt",
-      "type": "stoej",
-      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering"
+      "type": "ATK_støj",
+      "source": "FDM/Infrastrukturplan 2035, nov 2025 - approksimativ placering",
+      "expected_active": "2027-01-01"
     }
   ]
 }
