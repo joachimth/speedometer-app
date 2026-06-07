@@ -43,29 +43,51 @@ export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadI
     const query = `[out:json];(way(around:30,${latest.lat},${latest.lng})["highway"];);out body;`;
     const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
 
+    console.log(`[OSM] Henter hastighedsgrænse @ ${latest.lat.toFixed(5)}, ${latest.lng.toFixed(5)}`);
+
     axios.get(overpassUrl)
         .then(response => {
             const roads = response.data.elements;
-            if (roads.length > 0) {
-                const nearestRoad = roads[0];
-                const speedLimit = nearestRoad.tags.maxspeed || "";
-                const roadName   = nearestRoad.tags.name || nearestRoad.tags.ref || "";
-                const roadType   = nearestRoad.tags.highway || "";
+            console.log(`[OSM] Svar: ${roads.length} vej(e) fundet`);
 
-                updateRoadHistory(roadHistory, { roadName, speedLimit, roadType }, 3);
-                if (isConsistentRoadData(roadHistory)) {
-                    speedLimitDisplay.textContent = speedLimit || "–";
-                    roadInfoDisplay.textContent   = roadName ? `${roadName} (${roadType})` : roadType;
-                    if (typeof onLimitUpdate === 'function') onLimitUpdate(speedLimit);
-                }
+            if (roads.length === 0) {
+                console.log("[OSM] Ingen veje i nærheden");
+                return;
+            }
+
+            const nearestRoad = roads[0];
+            const speedLimit = nearestRoad.tags?.maxspeed || "";
+            const roadName   = nearestRoad.tags?.name || nearestRoad.tags?.ref || "";
+            const roadType   = nearestRoad.tags?.highway || "";
+
+            console.log(`[OSM] Vej: "${roadName}" (${roadType}) | maxspeed: "${speedLimit || 'ikke sat'}"`);
+
+            updateRoadHistory(roadHistory, { roadName, speedLimit, roadType }, 3);
+            console.log(`[OSM] Historik (${roadHistory.length}/3):`, roadHistory.map(r => r.speedLimit || '–'));
+
+            // Show speed limit immediately when we have one.
+            // History is used to debounce road-name flicker on roadInfo, not to gate the speed limit itself.
+            if (speedLimit) {
+                speedLimitDisplay.textContent = speedLimit;
+                if (typeof onLimitUpdate === 'function') onLimitUpdate(speedLimit);
+                console.log(`[OSM] Viser hastighedsgrænse: ${speedLimit}`);
+            } else {
+                console.log("[OSM] Ingen maxspeed-tag på denne vej");
+            }
+
+            // Road info: only update when history is consistent (avoids flicker at intersections)
+            if (isConsistentRoadData(roadHistory)) {
+                roadInfoDisplay.textContent = roadName ? `${roadName} (${roadType})` : roadType;
+            } else {
+                console.log("[OSM] Historik endnu ikke konsistent - venter med at vise vejnavn");
             }
         })
         .catch(error => {
             if (error.response && error.response.status === 429) {
                 backoffUntil = Date.now() + BACKOFF_MS;
-                console.warn("OSM rate limit (429) på hastighedsgrænse - venter 60s");
+                console.warn("[OSM] Rate limit (429) - venter 60s");
             } else {
-                console.error("Error fetching road data from OSM:", error);
+                console.error("[OSM] Fejl ved hentning:", error.message || error);
             }
         })
         .finally(() => { inFlight = false; });
