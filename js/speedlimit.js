@@ -1,16 +1,19 @@
 import { updateRoadHistory, isConsistentRoadData } from './helpers.js';
 
-// Throttle state - prevents hammering Overpass API (max ~1 req/min per IP)
+// Gate: min 5s OR min 50m moved. Skip if request already in flight.
+// The 429 was caused by 12-coordinate batch queries, not frequency.
+// A single-node query every 5s is well within Overpass fair use.
 let lastFetchTime = 0;
 let lastFetchLat = null;
 let lastFetchLng = null;
 let backoffUntil = 0;
+let inFlight = false;
 
-const MIN_FETCH_INTERVAL_MS = 30000; // minimum 30s between requests
-const MIN_DISTANCE_M = 100;          // minimum 100m movement before re-fetching
-const BACKOFF_MS = 120000;           // 2 minute backoff on 429
+const MIN_FETCH_INTERVAL_MS = 5000; // 5s - at 80km/h = ~110m max lag
+const MIN_DISTANCE_M = 50;          // 50m - catches zone boundaries promptly
+const BACKOFF_MS = 60000;           // 60s backoff on 429
 
-function haversineMeters(lat1, lng1, lat2, lng2) {
+export function haversineMeters(lat1, lng1, lat2, lng2) {
     const R = 6371000;
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLng = (lng2 - lng1) * Math.PI / 180;
@@ -24,16 +27,9 @@ export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadI
     const now = Date.now();
     const latest = coordinates[coordinates.length - 1];
 
-    // Respect backoff after 429
-    if (now < backoffUntil) {
-        console.log(`OSM backoff aktiv - ${Math.round((backoffUntil - now) / 1000)}s tilbage`);
-        return;
-    }
-
-    // Minimum time between requests
+    if (now < backoffUntil) return;
+    if (inFlight) return;
     if (now - lastFetchTime < MIN_FETCH_INTERVAL_MS) return;
-
-    // Minimum distance moved since last fetch
     if (lastFetchLat !== null) {
         const dist = haversineMeters(lastFetchLat, lastFetchLng, latest.lat, latest.lng);
         if (dist < MIN_DISTANCE_M) return;
@@ -42,8 +38,8 @@ export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadI
     lastFetchTime = now;
     lastFetchLat = latest.lat;
     lastFetchLng = latest.lng;
+    inFlight = true;
 
-    // Query only the most recent position (not all 12 coordinates)
     const query = `way(around:30,${latest.lat},${latest.lng})["highway"];`;
     const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(${query});out body;`;
 
@@ -62,16 +58,15 @@ export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadI
                     roadInfoDisplay.textContent   = roadName ? `${roadName} (${roadType})` : roadType;
                     if (typeof onLimitUpdate === 'function') onLimitUpdate(speedLimit);
                 }
-            } else {
-                console.log("Ingen veje fundet i nærheden");
             }
         })
         .catch(error => {
             if (error.response && error.response.status === 429) {
                 backoffUntil = Date.now() + BACKOFF_MS;
-                console.warn("OSM rate limit (429) - venter 2 minutter");
+                console.warn("OSM rate limit (429) på hastighedsgrænse - venter 60s");
             } else {
                 console.error("Error fetching road data from OSM:", error);
             }
-        });
+        })
+        .finally(() => { inFlight = false; });
 }

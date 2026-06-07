@@ -1,36 +1,25 @@
-import { getDistanceFromLatLonInKm } from './helpers.js';
+import { haversineMeters } from './speedlimit.js';
 
-// Throttle state - cameras change rarely, so 60s + 200m is plenty
+// Gate: min 5s OR min 100m moved. Skip if in flight.
+// 500m detection radius at 80km/h = ~22 seconds warning at worst.
+// That's plenty of time - no need for aggressive throttling here.
 let lastCameraFetchTime = 0;
 let lastCameraLat = null;
 let lastCameraLng = null;
 let cameraBackoffUntil = 0;
+let cameraInFlight = false;
 
-const CAMERA_MIN_INTERVAL_MS = 60000; // 60s between requests
-const CAMERA_MIN_DISTANCE_M  = 200;   // 200m movement before re-fetching
-const CAMERA_BACKOFF_MS      = 120000; // 2 min backoff on 429
-
-function haversineMeters(lat1, lng1, lat2, lng2) {
-    const R = 6371000;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a =
-        Math.sin(dLat / 2) ** 2 +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
+const CAMERA_MIN_INTERVAL_MS = 5000;  // 5s
+const CAMERA_MIN_DISTANCE_M  = 100;   // 100m - fine for 500m detection radius
+const CAMERA_BACKOFF_MS      = 60000; // 60s backoff on 429
 
 export function checkForSpeedCameras(coordinates) {
     const now = Date.now();
     const latest = coordinates[coordinates.length - 1];
 
-    // Respect backoff after 429
     if (now < cameraBackoffUntil) return;
-
-    // Minimum time between requests
+    if (cameraInFlight) return;
     if (now - lastCameraFetchTime < CAMERA_MIN_INTERVAL_MS) return;
-
-    // Minimum distance moved since last fetch
     if (lastCameraLat !== null) {
         const dist = haversineMeters(lastCameraLat, lastCameraLng, latest.lat, latest.lng);
         if (dist < CAMERA_MIN_DISTANCE_M) return;
@@ -39,8 +28,8 @@ export function checkForSpeedCameras(coordinates) {
     lastCameraFetchTime = now;
     lastCameraLat = latest.lat;
     lastCameraLng = latest.lng;
+    cameraInFlight = true;
 
-    // Query only the most recent position with a 500m radius
     const query = `node(around:500,${latest.lat},${latest.lng})["highway"="speed_camera"];`;
     const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];(${query});out body;`;
 
@@ -56,9 +45,10 @@ export function checkForSpeedCameras(coordinates) {
         .catch(error => {
             if (error.response && error.response.status === 429) {
                 cameraBackoffUntil = Date.now() + CAMERA_BACKOFF_MS;
-                console.warn("OSM rate limit (429) på fartkamera - venter 2 minutter");
+                console.warn("OSM rate limit (429) på fartkamera - venter 60s");
             } else {
                 console.error("Error checking for speed cameras:", error);
             }
-        });
+        })
+        .finally(() => { cameraInFlight = false; });
 }
