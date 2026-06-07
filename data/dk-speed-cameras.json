@@ -2,11 +2,11 @@
   "meta": {
     "source": "OSM (operator=Vejdirektoratet) + TRM/Vejdirektoratet 2018 + FDM/Infrastrukturplan 2035 (nov 2025)",
     "updated": "2026-06-07",
-    "count_active": 22,
+    "count_active": 26,
     "count_planned": 44,
-    "locations_active": 12,
+    "locations_active": 14,
     "locations_planned": 19,
-    "notes": "20 faste ATK-standere (stærekasser) på 11 lokationer siden 2018. Infrastrukturplan 2035: 30 nye landevejskameraer + 10 støjstærekasser på motorveje = 60 ialt. Opsætning begynder 2027. Planlagte lokationer har approksimate koordinater (midtpunkt af strækning) - eksakt placering ikke offentliggjort. SCDB cross-validation 2026-06-07: alle 20 eksisterende ATK koordinater bekræftet + 2 nye kameraer på Nordjyske Motorvej, Aalborg (SCDB #203666/#203667, A+)."
+    "notes": "20 faste ATK-standere (stærekasser) på 11 lokationer siden 2018. Infrastrukturplan 2035: 30 nye landevejskameraer + 10 støjstærekasser på motorveje = 60 ialt. Opsætning begynder 2027. Planlagte lokationer har approksimate koordinater (midtpunkt af strækning) - eksakt placering ikke offentliggjort. SCDB cross-validation 2026-06-07: alle 20 eksisterende ATK koordinater bekræftet + 2 nye kameraer på Nordjyske Motorvej, Aalborg (SCDB #203666/#203667, A+). SCDB cross-val 2026-06-07 (round 2): +4 E20 motorvejskameraer vest for Slagelse (atk-13) og øst for Korsør (atk-14). Koordinater fra SCDB cluster API, ej bekræftet i OSM endnu."
   },
   "cameras": [
     {
@@ -261,6 +261,50 @@
       "maxspeed": 130,
       "direction": null,
       "source": "SCDB #203667 (A+, status confirmed), cross-validated 2026-06-07"
+    },
+    {
+      "id": "atk-13a",
+      "name": "E20, vest for Slagelse (retning Korsør)",
+      "road": "E20",
+      "municipality": "Slagelse",
+      "lat": 55.344608,
+      "lng": 11.05698,
+      "maxspeed": 130,
+      "direction": null,
+      "source": "SCDB synthetic cluster (A+, bidirectional pair), cross-validated 2026-06-07. Ej i OSM."
+    },
+    {
+      "id": "atk-13b",
+      "name": "E20, vest for Slagelse (retning København)",
+      "road": "E20",
+      "municipality": "Slagelse",
+      "lat": 55.344608,
+      "lng": 11.05698,
+      "maxspeed": 130,
+      "direction": null,
+      "source": "SCDB synthetic cluster (A+, bidirectional pair), cross-validated 2026-06-07. Ej i OSM."
+    },
+    {
+      "id": "atk-14a",
+      "name": "E20, øst for Korsør (retning Korsør)",
+      "road": "E20",
+      "municipality": "Slagelse",
+      "lat": 55.349617,
+      "lng": 11.097924,
+      "maxspeed": 130,
+      "direction": null,
+      "source": "SCDB #181410 (A+, E20 Region Syddanmark), cross-validated 2026-06-07. Ej i OSM."
+    },
+    {
+      "id": "atk-14b",
+      "name": "E20, øst for Korsør (retning København)",
+      "road": "E20",
+      "municipality": "Slagelse",
+      "lat": 55.349491,
+      "lng": 11.097323,
+      "maxspeed": 130,
+      "direction": null,
+      "source": "SCDB synthetic cluster near #181410 (A+), cross-validated 2026-06-07. Ej i OSM."
     },
     {
       "id": "plan-01a",
