@@ -1,94 +1,132 @@
 import { haversineMeters } from './speedlimit.js';
 import { getFilteredPosition } from './helpers.js';
 
-// Strategy: fetch ALL cameras within FETCH_RADIUS once, cache locally.
-// Re-fetch only when we've moved > REFETCH_DISTANCE from the cache center.
-// All proximity checks are then pure JS - zero network calls while driving.
-//
-// At 130 km/h you cover 3km in ~83 seconds, so REFETCH_DISTANCE=3000m
-// means ~1 Overpass request per 1-2 minutes max, even at motorway speed.
-// The cache margin (FETCH_RADIUS >> ALERT_RADIUS) ensures no camera is missed
-// near the edge of the cache zone.
+// Primary source: static JSON with all 20 known Danish ATK stærekasser.
+// Loaded once at startup - no network, no rate limits, always available.
+// Secondary: OSM Overpass for areas outside Denmark (5km cache, refetch at 3km).
 
-const FETCH_RADIUS    = 5000;  // 5km fetch radius - large cache area
-const REFETCH_DISTANCE = 3000; // re-fetch when >3km from cache center
-const ALERT_RADIUS    = 500;   // warn driver when camera is within 500m
-const BACKOFF_MS      = 300000; // 5 min backoff on 429
+const ALERT_RADIUS     = 500;   // warn when camera is within 500m
+const FETCH_RADIUS     = 5000;  // OSM fallback: 5km radius
+const REFETCH_DISTANCE = 3000;  // OSM fallback: refetch when >3km from cache center
+const BACKOFF_MS       = 300000; // 5 min backoff on 429
 
-let cameraCache      = [];  // all cameras fetched last time
+// Static DK cameras - loaded once
+let dkCameras        = null;  // null = not loaded yet, [] = loaded (none found)
+let dkLoadAttempted  = false;
+
+// OSM fallback cache
+let osmCache         = [];
 let cacheCenterLat   = null;
 let cacheCenterLng   = null;
-let cameraInFlight   = false;
-let cameraBackoffUntil = 0;
+let osmInFlight      = false;
+let osmBackoffUntil  = 0;
 
-function fetchCameraCache(lat, lng) {
-    if (cameraInFlight) return;
-    if (Date.now() < cameraBackoffUntil) {
-        const remaining = Math.round((cameraBackoffUntil - Date.now()) / 1000);
-        console.log(`[Fartkamera] Backoff aktiv - ${remaining}s tilbage`);
+// Denmark bounding box (approx)
+const DK_BOUNDS = { minLat: 54.5, maxLat: 57.8, minLng: 8.0, maxLng: 15.3 };
+function isInDenmark(lat, lng) {
+    return lat >= DK_BOUNDS.minLat && lat <= DK_BOUNDS.maxLat &&
+           lng >= DK_BOUNDS.minLng && lng <= DK_BOUNDS.maxLng;
+}
+
+function loadDkCameras() {
+    if (dkLoadAttempted) return;
+    dkLoadAttempted = true;
+
+    // Path relative to the page (GitHub Pages serves from repo root)
+    fetch('./data/dk-speed-cameras.json')
+        .then(r => r.json())
+        .then(data => {
+            // Normalize to { lat, lng, name, maxspeed, direction }
+            dkCameras = data.cameras.map(c => ({
+                lat: c.lat, lng: c.lng,
+                name: c.name,
+                road: c.road,
+                maxspeed: c.maxspeed,
+                direction: c.direction
+            }));
+            console.log(`[Fartkamera] ${dkCameras.length} danske ATK-kameraer indlæst`);
+        })
+        .catch(err => {
+            console.warn("[Fartkamera] Kunne ikke indlæse dk-speed-cameras.json:", err.message);
+            dkCameras = []; // mark as loaded so we fall back to OSM
+        });
+}
+
+function fetchOsmCache(lat, lng) {
+    if (osmInFlight) return;
+    if (Date.now() < osmBackoffUntil) {
+        const remaining = Math.round((osmBackoffUntil - Date.now()) / 1000);
+        console.log(`[Fartkamera] OSM backoff aktiv - ${remaining}s tilbage`);
         return;
     }
 
-    cameraInFlight = true;
-    console.log(`[Fartkamera] Henter ${FETCH_RADIUS / 1000}km cache @ ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+    osmInFlight = true;
+    console.log(`[Fartkamera] Henter OSM ${FETCH_RADIUS / 1000}km cache @ ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
 
     const query = `[out:json];(node(around:${FETCH_RADIUS},${lat},${lng})["highway"="speed_camera"];);out body;`;
     const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
 
     axios.get(overpassUrl)
         .then(response => {
-            cameraCache    = response.data.elements;
+            osmCache       = response.data.elements;
             cacheCenterLat = lat;
             cacheCenterLng = lng;
-            console.log(`[Fartkamera] Cache opdateret: ${cameraCache.length} kamera(er) inden for ${FETCH_RADIUS / 1000}km`);
-            if (cameraCache.length > 0) {
-                cameraCache.forEach((c, i) => {
-                    const dist = haversineMeters(lat, lng, c.lat, c.lon);
-                    const type = c.tags?.camera_type || c.tags?.enforcement || 'ukendt';
-                    const dir  = c.tags?.direction || '?';
-                    console.log(`[Fartkamera] Cache #${i + 1}: ${dist.toFixed(0)}m | type: ${type} | retning: ${dir}`);
-                });
-            }
+            console.log(`[Fartkamera] OSM cache opdateret: ${osmCache.length} kamera(er) inden for ${FETCH_RADIUS / 1000}km`);
         })
         .catch(error => {
             if (error.response && error.response.status === 429) {
-                cameraBackoffUntil = Date.now() + BACKOFF_MS;
-                console.warn(`[Fartkamera] Rate limit (429) - backoff ${BACKOFF_MS / 60000} min`);
+                osmBackoffUntil = Date.now() + BACKOFF_MS;
+                console.warn(`[Fartkamera] OSM rate limit (429) - backoff ${BACKOFF_MS / 60000} min`);
             } else {
-                console.error("[Fartkamera] Fejl ved hentning:", error.message || error);
+                console.error("[Fartkamera] OSM fejl:", error.message || error);
             }
         })
-        .finally(() => { cameraInFlight = false; });
+        .finally(() => { osmInFlight = false; });
 }
 
-export function checkForSpeedCameras(coordinates) {
-    const latest = getFilteredPosition(coordinates);
-
-    // Re-fetch if no cache yet, or we've driven far enough from cache center
-    if (cacheCenterLat === null) {
-        fetchCameraCache(latest.lat, latest.lng);
-        return;
-    }
-
-    const distFromCenter = haversineMeters(cacheCenterLat, cacheCenterLng, latest.lat, latest.lng);
-    if (distFromCenter > REFETCH_DISTANCE) {
-        console.log(`[Fartkamera] Kørt ${distFromCenter.toFixed(0)}m fra cache-centrum - henter nyt område`);
-        fetchCameraCache(latest.lat, latest.lng);
-    }
-
-    // Check all cached cameras - pure JS, no network
-    if (cameraCache.length === 0) return;
-
-    const nearby = cameraCache
-        .map(c => ({ ...c, distance: haversineMeters(latest.lat, latest.lng, c.lat, c.lon) }))
+function checkNearby(cameras, lat, lng, nameKey = 'name', lngKey = 'lng') {
+    const nearby = cameras
+        .map(c => ({ ...c, distance: haversineMeters(lat, lng, c.lat, c[lngKey] ?? c.lon) }))
         .filter(c => c.distance <= ALERT_RADIUS)
         .sort((a, b) => a.distance - b.distance);
 
-    if (nearby.length > 0) {
-        nearby.forEach((c, i) => {
-            const type = c.tags?.camera_type || c.tags?.enforcement || 'ukendt';
-            const dir  = c.tags?.direction || '?';
-            console.log(`[Fartkamera] ⚠ #${i + 1} inden for ${ALERT_RADIUS}m: ${c.distance.toFixed(0)}m | type: ${type} | retning: ${dir}`);
-        });
+    nearby.forEach((c, i) => {
+        const name = c[nameKey] || c.tags?.name || 'ukendt';
+        const dir  = c.direction ?? c.tags?.direction ?? '?';
+        const spd  = c.maxspeed ?? c.tags?.maxspeed ?? '?';
+        console.log(`[Fartkamera] ⚠ #${i + 1}: ${c.distance.toFixed(0)}m | ${name} | max: ${spd} | retning: ${dir}`);
+    });
+    return nearby.length;
+}
+
+export function checkForSpeedCameras(coordinates) {
+    // Start loading static DK cameras on first call
+    if (!dkLoadAttempted) loadDkCameras();
+
+    const latest = getFilteredPosition(coordinates);
+    const inDK   = isInDenmark(latest.lat, latest.lng);
+
+    if (inDK) {
+        if (dkCameras === null) {
+            console.log("[Fartkamera] DK-data endnu ikke indlæst - vent...");
+            return;
+        }
+        const found = checkNearby(dkCameras, latest.lat, latest.lng);
+        if (found === 0) console.log(`[Fartkamera] Ingen DK ATK-kameraer inden for ${ALERT_RADIUS}m`);
+    } else {
+        // Outside Denmark: use OSM cache
+        if (cacheCenterLat === null) {
+            fetchOsmCache(latest.lat, latest.lng);
+            return;
+        }
+        const distFromCenter = haversineMeters(cacheCenterLat, cacheCenterLng, latest.lat, latest.lng);
+        if (distFromCenter > REFETCH_DISTANCE) {
+            console.log(`[Fartkamera] Kørt ${distFromCenter.toFixed(0)}m fra OSM cache-centrum - henter nyt`);
+            fetchOsmCache(latest.lat, latest.lng);
+        }
+        if (osmCache.length > 0) {
+            const found = checkNearby(osmCache, latest.lat, latest.lng, 'tags', 'lon');
+            if (found === 0) console.log(`[Fartkamera] Ingen OSM kameraer inden for ${ALERT_RADIUS}m`);
+        }
     }
 }
