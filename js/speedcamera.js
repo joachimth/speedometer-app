@@ -1,4 +1,5 @@
 import { haversineMeters } from './speedlimit.js';
+import { getFilteredPosition } from './helpers.js';
 
 // Gate: min 5s OR min 100m moved. Skip if in flight.
 // 500m detection radius at 80km/h = ~22 seconds warning at worst.
@@ -15,7 +16,7 @@ const CAMERA_BACKOFF_MS      = 60000; // 60s backoff on 429
 
 export function checkForSpeedCameras(coordinates) {
     const now = Date.now();
-    const latest = coordinates[coordinates.length - 1];
+    const latest = getFilteredPosition(coordinates);
 
     if (now < cameraBackoffUntil) return;
     if (cameraInFlight) return;

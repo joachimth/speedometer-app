@@ -1,4 +1,4 @@
-import { updateRoadHistory, isConsistentRoadData } from './helpers.js';
+import { updateRoadHistory, isConsistentRoadData, getFilteredPosition } from './helpers.js';
 
 // Gate: min 5s OR min 50m moved. Skip if request already in flight.
 // The 429 was caused by 12-coordinate batch queries, not frequency.
@@ -25,7 +25,7 @@ export function haversineMeters(lat1, lng1, lat2, lng2) {
 
 export function getSpeedLimit(coordinates, roadHistory, speedLimitDisplay, roadInfoDisplay, onLimitUpdate) {
     const now = Date.now();
-    const latest = coordinates[coordinates.length - 1];
+    const latest = getFilteredPosition(coordinates);
 
     if (now < backoffUntil) return;
     if (inFlight) return;
